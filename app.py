@@ -1,42 +1,36 @@
-import os
+from flask import Flask, render_template, request
+import numpy as np
+import pandas as pd
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.neighbors import NearestNeighbors
 import pickle
 import difflib
-import logging
-from logging import StreamHandler
-from functools import lru_cache
-from flask import Flask, render_template, request
-
-from langdetect import detect, lang_detect_exception
-from googletrans import Translator
 
 app = Flask(__name__)
 
-# Set up logging
-app.logger.addHandler(StreamHandler())
-app.logger.setLevel(logging.ERROR)
+# Initialize vectorizer
+vectorizer = None
 
 # Load cached data
 try:
-    with open('preprocessed_data.pkl', 'rb') as f:
-        preprocessed_data = pickle.load(f)
-except FileNotFoundError:
-    preprocessed_data = preprocess_data()
-    with open('preprocessed_data.pkl', 'wb') as f:
-        pickle.dump(preprocessed_data, f)
-
-product_names, product_images, preprocessed_names = preprocessed_data
-
-@lru_cache(maxsize=1024)
-def translate_text(text, src_lang, dest_lang='en'):
-    translator = Translator()
-    return translator.translate(text, src=src_lang, dest=dest_lang).text.lower()
-
-def preprocess_data():
+    with open('feature_vectors.pkl', 'rb') as f:
+        feature_vectors = pickle.load(f)
+    with open('original_product_names.pkl', 'rb') as f:
+        original_product_names = pickle.load(f)
+    with open('original_product_images.pkl', 'rb') as f:
+        original_product_images = pickle.load(f)
+    ann_index = NearestNeighbors(algorithm='auto', metric='cosine')
+    ann_index.fit(feature_vectors)
+    vectorizer = pickle.load(open('vectorizer.pkl', 'rb'))  # Load vectorizer from cache
+    print("Loaded existing ANN index")
+except:
+    print("Creating new ANN index")
+    combined_features = []
+    original_product_names = []
+    original_product_images = []
     chunksize = 10000
-    product_names = []
-    product_images = []
-    preprocessed_names = []
 
+    # Load data in chunks and preprocess
     for dataset_path, selected_features in [
         ('mens_westernwear.csv', ['Name', 'Image']),
         ('women_footwear.csv', ['Name', 'Image']),
@@ -46,16 +40,33 @@ def preprocess_data():
         ('BigBasket3.csv', ['Name', 'Image']),
         ('electronics_product1.csv', ['Name', 'Image']),
         ('electronics_product2.csv', ['Name', 'Image'])
+        
        
+        
     ]:
         for chunk in pd.read_csv(dataset_path, chunksize=chunksize):
             for feature in selected_features:
                 chunk[feature] = chunk[feature].fillna('')
-            product_names.extend(chunk['Name'])
-            product_images.extend(chunk['Image'])
-            preprocessed_names.extend([name.lower() for name in chunk['Name']])
+            combined_features.extend(chunk['Name'].str.lower() + ' ' + chunk['Image'])
+            original_product_names.extend(chunk['Name'])
+            original_product_images.extend(chunk['Image'])
 
-    return product_names, product_images, preprocessed_names
+    vectorizer = TfidfVectorizer(ngram_range=(1, 2))  # Use unigrams and bigrams
+    feature_vectors = vectorizer.fit_transform(combined_features)
+
+    # Build approximate nearest neighbor index
+    ann_index = NearestNeighbors(algorithm='auto', metric='cosine')
+    ann_index.fit(feature_vectors)
+
+    # Cache feature vectors, product names, product images, and vectorizer
+    with open('feature_vectors.pkl', 'wb') as f:
+        pickle.dump(feature_vectors, f)
+    with open('original_product_names.pkl', 'wb') as f:
+        pickle.dump(original_product_names, f)
+    with open('original_product_images.pkl', 'wb') as f:
+        pickle.dump(original_product_images, f)
+    with open('vectorizer.pkl', 'wb') as f:
+        pickle.dump(vectorizer, f)
 
 @app.route('/')
 def home():
@@ -67,47 +78,37 @@ def project_overview():
 
 @app.route('/recommend', methods=['POST'])
 def recommend():
-    try:
-        query = request.form['product_name']  # Get the input query
+    if vectorizer is None:
+        return "Error: Vectorizer not initialized."
 
-        # Detect the language of the query
-        query_lang = detect(query)
+    query = request.form['product_name'].lower()  # Convert input to lowercase
 
-        # Translate the query to English if not in English
-        if query_lang != 'en':
-            query = translate_text(query, query_lang)
-        else:
-            query = query.lower()  # Convert to lowercase if already in English
+    # Find products that match the query
+    matching_products = []
+    preprocessed_names = [name.lower() for name in original_product_names]
+    matches = [name for name in preprocessed_names if query in name]
+    matching_indices = [preprocessed_names.index(match) for match in matches]
+    matching_products = [(original_product_names[idx], original_product_images[idx]) for idx in matching_indices]
 
-        # Find products that match the query
-        matches = [name for name in preprocessed_names if query in name]
-        matching_indices = [preprocessed_names.index(match) for match in matches]
-        matching_products = [(product_names[idx], product_images[idx]) for idx in matching_indices]
+    if matching_products:
+        # Calculate similarity scores for matching products
+        combined_features = [name.lower() + ' ' + image_url for name, image_url in matching_products]
+        query_vector = vectorizer.transform(combined_features)
+        distances, indices = ann_index.kneighbors(query_vector, n_neighbors=20)
+        similarity_scores = 1 - distances.ravel()
 
-        if matching_products:
-            # Calculate similarity scores for matching products
-            similarity_scores = [difflib.SequenceMatcher(None, query, name.lower()).ratio() for name in [p[0] for p in matching_products]]
+        # Sort matching products by similarity scores
+        sorted_products = sorted(zip(matching_products, similarity_scores), key=lambda x: x[1], reverse=True)
 
-            # Sort matching products by similarity scores
-            sorted_products = sorted(zip(matching_products, similarity_scores), key=lambda x: x[1], reverse=True)
+        # Get top 20 recommendations
+        recommended_products = [product_info for product_info, _ in sorted_products[:20]]
 
-            # Get top 20 recommendations
-            recommended_products = [product_info for product_info, _ in sorted_products[:20]]
-
-            return render_template('recommendations.html', product_name=query.capitalize(), recommended_products=recommended_products)
-        else:
-            # Suggest similar product names using difflib
-            close_matches = difflib.get_close_matches(query, product_names, n=10, cutoff=0.6)
-            suggested_products = [(name, '') for name in close_matches]
-            return render_template('suggestions.html', product_name=query.capitalize(), suggested_products=suggested_products)
-
-    except lang_detect_exception as e:
-        app.logger.error(f"Language detection error: {str(e)}")
-        return "An error occurred during language detection. Please try again later."
-    except Exception as e:
-        app.logger.error(f"Error in recommend function: {str(e)}")
-        return "An error occurred. Please try again later."
+        return render_template('recommendations.html', product_name=query.capitalize(), recommended_products=recommended_products)
+    else:
+        # Suggest similar product names using difflib
+        close_matches = difflib.get_close_matches(query, original_product_names, n=10, cutoff=0.6)
+        suggested_products = [(name, '') for name in close_matches]
+        return render_template('suggestions.html', product_name=query.capitalize(), suggested_products=suggested_products)
 
 if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 5000))
-    app.run(host="0.0.0.0", port=port, debug=True)
+    app.run(debug=True)
