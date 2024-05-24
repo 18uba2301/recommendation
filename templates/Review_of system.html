@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Overview</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-image: url(static/review.jpg);
+            background-size: cover;
+            background-position: center;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #007bff;
+        }
+
+        h2 {
+            color: #0056b3;
+            background-color: #e9f5ff;
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        p {
+            line-height: 1.6;
+            background-color: #f9f9f9;
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        ul {
+            list-style-type: disc;
+            padding-left: 20px;
+            background-color: #f9f9f9;
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        ul li {
+            margin-bottom: 10px;
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 1200px) {
+            body {
+                background-size: 100%;
+            }
+
+            .container {
+                padding: 15px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 20px;
+            }
+
+            .container {
+                padding: 10px;
+            }
+
+            h1 {
+                font-size: 24px;
+            }
+
+            h2 {
+                font-size: 20px;
+            }
+
+            p,
+            ul {
+                font-size: 16px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 20px;
+            }
+
+            .container {
+                padding: 5px;
+            }
+
+            h1 {
+                font-size: 20px;
+            }
+
+            h2 {
+                font-size: 18px;
+            }
+
+            p,
+            ul {
+                font-size: 14px;
+            }
+        }
+
+        form {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            max-width: 800px;
+            margin: 20px auto;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        input[type="text"],
+        textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        .rating {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .rating input[type="radio"] {
+            display: none;
+        }
+
+        .rating label {
+            cursor: pointer;
+            font-size: 78px;
+            color: #ccc;
+        }
+
+        .rating input[type="radio"]:checked~label {
+            color: #ffbf00;
+            box-sizing: border-box;
+        }
+
+        button[type="submit"] {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Project Overview</h1>
+        <h2>Welcome to our Product Recommendation System!</h2>
+        <p>This project shows how a recommendation system works using content filtering. It uses advanced machine learning and data processing to give you personalized product suggestions.</p>
+
+        <h2>Key Features</h2>
+        <ul>
+            <li><strong>Search Functionality:</strong> Browse through various products and collections. While this isn't a complete online store, it does have a strong search feature to assist you in finding products you're interested in.</li>
+            <li><strong>Content-Based Filtering:</strong> Our system employs content filtering methods to suggest products by comparing their descriptions and features. This guarantees that the recommendations align closely with the user's preferences.</li>
+            <li><strong>Educational Purpose:</strong> This project is created solely for educational purposes. Its goal is to illustrate how machine learning can be used to construct recommendation systems. It serves as a valuable resource for students, teachers, and enthusiasts interested in delving deeper into machine learning and data science.</li>
+            <li><strong>Advanced Techniques:</strong> The recommendation engine utilizes advanced machine learning techniques such as TF-IDF vectorization and nearest neighbors algorithms to efficiently process and analyze product data.</li>
+        </ul>
+
+        <h2>How to Use</h2>
+        <ul>
+            <li><strong>Search for Products:</strong> Enter a product name in the search bar to see a list of recommended products based on your input.</li>
+            <li><strong>Review Recommendations:</strong> The system will display a list of products that match or are similar to your search query.</li>
+            <li><strong>Provide Feedback:</strong> Your feedback is invaluable for the success of this project. Please take a moment to rate the recommendations and provide any suggestions for improvement.</li>
+        </ul>
+
+        <h2>Feedback</h2>
+        <p>Your feedback is essential for refining and enhancing this project. Please utilize the rating system to provide your feedback on the recommendations. This will aid us in improving the accuracy and usability of the system.</p>
+
+        <h2>Disclaimer</h2>
+        <ul>
+            <li><strong>Not for Commercial Use:</strong> This system is a prototype and isn't meant for commercial purposes.</li>
+            <li><strong>Data Privacy:</strong> All data utilized in this project is publicly accessible and employed exclusively for educational objectives.</li>
+            <li><strong>No Actual Transactions:</strong> The system does not facilitate real transactions or purchases.</li>
+        </ul>
+
+        <h2>Support</h2>
+        <p>Your support and feedback are crucial for the success of this project. If you find this project intriguing or have suggestions for improvement, please feel free to share your thoughts. Your constructive feedback will aid us in continuing to develop and refine our recommendation system.</p>
+    </div>
+
+    <form action="https://formspree.io/f/xrgnvepy" method="post">
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required>
+        <label for="feedback">Feedback:</label>
+        <textarea id="feedback" name="feedback" rows="5" placeholder="Your comment is optional."></textarea>
+        <label for="rating">Rate Your Experience</label>
+        <div class="rating">
+            <input type="radio" id="star5" name="rating" value="5">
+            <label for="star5">☆</label>
+            <input type="radio" id="star4" name="rating" value="4">
+            <label for="star4">☆</label>
+            <input type="radio" id="star3" name="rating" value="3">
+            <label for="star3">☆</label>
+            <input type="radio" id="star2" name="rating" value="2">
+            <label for="star2">☆</label>
+            <input type="radio" id="star1" name="rating" value="1">
+            <label for="star1">☆</label>
+        </div>
+
+        <button type="submit">Submit Feedback</button>
+    </form>
+</body>
+
+</html>

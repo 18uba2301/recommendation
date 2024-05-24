@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Product Suggestions</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-image: url(static/data.jpg);
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            height: 100vh; /* Full viewport height */
+        }
+        h1 {
+            text-align: center;
+            color: aliceblue;
+            font-size: 2.5em;
+            margin: 0; /* Remove default margin */
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0; /* Remove default margin */
+        }
+        li {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+            color: aliceblue;
+            font-size: 1.25em;
+            text-align: center; /* Center text horizontally */
+        }
+        p {
+            color: rgb(214, 214, 9);
+            font-size: 1.5em;
+            text-align: center;
+            margin: 20px 0;
+        }
+        /* Media queries for responsive design */
+        @media (max-width: 1200px) {
+            body {
+                max-width: 100%;
+                padding: 15px;
+                background-size: cover;
+            }
+            h1 {
+                font-size: 2em;
+            }
+            p {
+                font-size: 1.25em;
+            }
+            li {
+                font-size: 1.1em;
+            }
+        }
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+                background-size: cover;
+            }
+            h1 {
+                font-size: 1.75em;
+            }
+            p {
+                font-size: 1.25em;
+            }
+            li {
+                padding: 8px;
+                font-size: 1em;
+            }
+        }
+        @media (max-width: 480px) {
+            body {
+                padding: 5px;
+                background-size: cover;
+                justify-content: center; /* Center content vertically */
+                height: 100vh; /* Full viewport height */
+            }
+            h1 {
+                font-size: 1.5em;
+                padding-top: 0; /* Remove top padding */
+            }
+            p {
+                font-size: 1.1em;
+            }
+            li {
+                padding: 5px;
+                font-size: 1em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Suggestions for "{{ product_name }}"</h1>
+    <p>No exact matches found for your search, Use other keywords.</p>
+    <ul>
+        <li>Some products for you:</li>
+        {% for name, _ in suggested_products %}
+        <li>{{ name }}</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
+
+
+
+

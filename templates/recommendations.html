@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Recommendations</title>
+    <style>
+        body {
+            background-image: url(static/social_media.jpg);
+            margin: 0;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .product-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            max-width: 1200px;
+            padding: 20px;
+            background-color: #F7F7F7;
+            border-radius: 10px;
+        }
+
+        .product-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #FFFFFF;
+            border-radius: 3px;
+        }
+
+        .product-card img {
+            max-width: 100%;
+            height: 100px;
+            border-radius: 5px;
+        }
+
+        .product-card h3 {
+            margin-top: 10px;
+            text-align: center;
+            font-size: small;
+
+        }
+
+        h1 {
+            text-align: center;
+            margin-top: 0;
+        }
+
+        .menu {
+            background-color: #131921;
+            border-radius: 10px;
+            padding: 10px;
+            margin-bottom: 20px;
+            color: #FFFFFF;
+
+        }
+
+        form {
+            margin: 20px auto;
+            max-width: 600px;
+            padding: 20px;
+            background-color: #FFFFFF;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        form label {
+            display: block;
+            margin-bottom: 10px;
+            font-size: 18px;
+        }
+
+        form input[type="text"],
+        form textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        form textarea {
+            resize: vertical;
+        }
+
+        form .rating {
+            margin-bottom: 15px;
+        }
+
+        form .rating input[type="radio"] {
+            display: none;
+        }
+
+        form .rating label {
+            display: inline-block;
+            font-size: 44px;
+            color: #FFD700; /* Change color for selected stars */
+            cursor: pointer;
+        }
+
+        form .rating input[type="radio"] + label:before {
+            content: "☆";
+            margin-right: 5px;
+        }
+
+        form .rating input[type="radio"]:checked ~ label:before {
+            content: "★";
+        }
+
+        form button[type="submit"] {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background-color: #007bff;
+            color: #FFFFFF;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 18px;
+            transition: background-color 0.3s ease;
+        }
+
+        form button[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="menu">
+        <h1>Recommended Products Based on Your Search: {{ product_name }}</h1>
+    </div>
+    <div class="product-container">
+
+        {% for Name, Image in recommended_products %}
+        <div class="product-card">
+            {% if Image %}
+            <img src="{{ Image }}" alt="{{ Name }} Image">
+            {% endif %}
+            <h3>{{ Name }}</h3>
+        </div>
+        {% endfor %}
+    </div>
+    <form action="https://formspree.io/f/xrgnvepy" method="post">
+        <label for="name" style="font-size: x-large; ">Name:</label>
+        <input type="text" id="name" name="name" required>
+        <label for="feedback"></label>
+        <textarea id="feedback" name="feedback" rows="5" placeholder="Your comment is optional."></textarea>
+        <label for="rating" style="font-size: x-large;">Rate Your Experience</label>
+        <div class="rating">
+            <input type="radio" id="star5" name="rating" value="5">
+            <label for="star5"></label>
+            <input type="radio" id="star4" name="rating" value="4">
+            <label for="star4"></label>
+            <input type="radio" id="star3" name="rating" value="3">
+            <label for="star3"></label>
+            <input type="radio" id="star2" name="rating" value="2">
+            <label for="star2"></label>
+            <input type="radio" id="star1" name="rating" value="1">
+            <label for="star1"></label>
+        </div>
+
+        <button type="submit">Submit Feedback</button>
+    </form>
+</body>
+
+</html>

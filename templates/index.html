@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <title>Product Recommendation System</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-image: url(static/space_house.jpg);
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #333;
+        }
+
+        h1 {
+            color: white;
+            text-align: center;
+        }
+
+        .form-1 {
+            background-color: rgba(255, 255, 255, 0.5);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 500px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        label,
+        input[type="text"],
+        input[type="submit"] {
+            width: 100%;
+            margin-bottom: 10px;
+        }
+
+        input[type="text"] {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        input[type="submit"] {
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            box-sizing: border-box;
+            width: 100px;
+            text-align: center;
+        }
+
+        input[type="text"],
+        textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #45a049;
+
+        }
+
+        .rating {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .rating input[type="radio"] {
+            display: none;
+        }
+
+        .rating label {
+            cursor: pointer;
+            font-size: 58px;
+            color: #ccc;
+        }
+
+        .rating input[type="radio"]:checked~label {
+            color: #ffbf00;
+        }
+
+        button[type="submit"] {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #0056b3;
+
+        }
+
+        a {
+            color: white;
+            text-decoration: none;
+        }
+
+        .box-container {
+            background-color: rgba(255, 255, 255, 0.3);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            width: 100%;
+            max-width: 800px;
+            color: #fff;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 20px;
+            }
+
+            .form-1,
+            .box-container {
+                padding: 15px;
+            }
+
+            h1 {
+                font-size: large;
+            }
+        }
+
+        @media (max-width: 480px) {
+           
+
+            .form-1,
+            .box-container {
+                padding: 10px;
+            }
+
+            h1 {
+                font-size: large;
+            }
+            body{
+                padding: 20px;
+            }
+
+            label,
+            input[type="text"],
+            input[type="submit"] {
+                font-size: small;
+            }
+           
+           .adjust{
+            padding-right:20px ;
+           }
+           
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Welcome to our Product Recommendation System!</h1>
+    <nav class="box-container">
+        <form action="/recommend" method="post">
+            <label for="product_name" style="color: #dee3e8; font-size: large;"><b>Enter a product
+                    name:</b></label><br><br>
+            <input type="text" id="product_name" name="product_name" required>
+            <input type="submit" value="Search"> 
+        </form>
+        <br>
+    </nav>
+    <div class="box-container">
+        <a class="size" style="color: yellow; font-size: large;">Once you have finished exploring, please take a moment to complete this form
+            <i class='fas fa-sign-in-alt' style='font-size:24px;'></i><button class="adjust" type="submit"><a 
+                href="https://surveyheart.com/form/664cb6a93484ed28e8b75d34">Respond</a></button> </a>
+    </div>
+
+    <div class="box-container">
+        <h2>Project Overview</h2>
+        <p>உள்ளடக்க வடிகட்டலைப் பயன்படுத்தி பரிந்துரை அமைப்பு எவ்வாறு செயல்படுகிறது என்பதை இந்தத் திட்டம் காட்டுகிறது.
+            இது உங்களுக்குத் தனிப்பயனாக்கப்பட்ட தயாரிப்பு பரிந்துரைகளை வழங்க மேம்பட்ட இயந்திர கற்றல் மற்றும் தரவு
+            செயலாக்கத்தைப் பயன்படுத்துகிறது.</p>
+        <p>This project shows how a recommendation system works using content filtering. It uses advanced machine
+            learning and data processing to give you personalized product suggestions.</p>
+    </div>
+
+    <div class="box-container">
+        <h2>How to Use</h2>
+        <p>உங்கள் தேடல் வினவலுடன் பொருந்தக்கூடிய பரிந்துரைக்கப்பட்ட தயாரிப்புகளின் தேர்வைக் காண, தேடல் புலத்தில்
+            தயாரிப்பின் பெயரை உள்ளிடவும்.</p>
+        <p>Search for Products: Enter a product name in the search bar to see a list of recommended products based on
+            your input.</p>
+    </div>
+
+    <div class="box-container">
+        <h2>Feedback</h2>
+        <p>திட்டத்தின் வெற்றிக்கு கருத்து முக்கியமானது. பரிந்துரைகளை மதிப்பிட சிறிது நேரம் ஒதுக்கி, மேம்படுத்துவதற்கான
+            பரிந்துரைகளை வழங்கவும்.</p>
+        <p>Provide Feedback: Your feedback is invaluable for the success of this project. Please take a moment to rate
+            the recommendations and provide any suggestions for improvement.</p>
+    </div>
+
+    <div class="box-container">
+        <h2>Disclaimer</h2>
+        <p>இந்த அமைப்பு ஒரு முன்மாதிரி மற்றும் பணம் சம்பாதிப்பதற்காகவோ அல்லது எதையும் விற்பதற்காகவோ
+            பயன்படுத்தப்படவில்லை.</p>
+        <p>This system is just a prototype and isn't meant to be used for making money or selling anything.</p>
+    </div>
+
+
+    <button type="submit"><a href="Review_of system.html">More Details</a></button><br><br>
+
+    <form action="https://formspree.io/f/xrgnvepy" method="post">
+        <label for="name" style="font-size: x-large; color: #fff;">Name:</label>
+        <input type="text" id="name" name="name" required>
+        <label for="feedback"></label>
+        <textarea id="feedback" name="feedback" rows="5" placeholder="Your comment is optional."></textarea>
+        <label for="rating" style="font-size: x-large; color: #fff;">Rate Your Experience</label>
+        <div class="rating">
+            <input type="radio" id="star5" name="rating" value="5">
+            <label for="star5">☆</label>
+            <input type="radio" id="star4" name="rating" value="4">
+            <label for="star4">☆</label>
+            <input type="radio" id="star3" name="rating" value="3">
+            <label for="star3">☆</label>
+            <input type="radio" id="star2" name="rating" value="2">
+            <label for="star2">☆</label>
+            <input type="radio" id="star1" name="rating" value="1">
+            <label for="star1">☆</label>
+        </div>
+
+        <button type="submit">Submit Feedback</button>
+    </form>
+</body>
+
+</html>
