@@ -48,8 +48,7 @@ except:
         ('applicants.csv', ['Name', 'Image']),
         ('BigBasket3.csv', ['Name', 'Image']),
         ('electronics_product1.csv', ['Name', 'Image']),
-        ('electronics_product2.csv', ['Name', 'Image']),
-        ('amz_ca_total_products.csv', ['Name', 'Image'])
+        ('electronics_product2.csv', ['Name', 'Image'])
     ]:
         for chunk in pd.read_csv(dataset_path, chunksize=chunksize):
             for feature in selected_features:
